@@ -33,6 +33,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout.setObjectName(u"horizontalLayout")
         self.lineEdit_dir = QLineEdit(self.centralwidget)
         self.lineEdit_dir.setObjectName(u"lineEdit_dir")
+        self.lineEdit_dir.setReadOnly(True)
 
         self.horizontalLayout.addWidget(self.lineEdit_dir)
 
@@ -134,13 +135,14 @@ class Ui_MainWindow(object):
     # setupUi
 
     def retranslateUi(self, MainWindow):
-        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u56fe\u7247\u81ea\u52a8\u8f6e\u6362\u5de5\u5177 by AfricanGigolo", None))
+        MainWindow.setWindowTitle(QCoreApplication.translate("MainWindow", u"\u81ea\u52a8\u5207\u6362\u58c1\u7eb8\u5de5\u5177 by AfricanGigolo", None))
+        self.lineEdit_dir.setPlaceholderText(QCoreApplication.translate("MainWindow", u"\u8bf7\u9009\u62e9\u56fe\u7247\u5b58\u50a8\u8def\u5f84", None))
         self.pushButton_selectpath.setText(QCoreApplication.translate("MainWindow", u"\u9009\u62e9\u8f6e\u6362\u6587\u4ef6\u5939", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"\u81ea\u52a8\u8f6e\u6362\u95f4\u9694\uff1a", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"\u5206\u949f", None))
         self.checkBox_close.setText(QCoreApplication.translate("MainWindow", u"\u5173\u95ed\u65f6\u9690\u85cf\u5230\u6258\u76d8", None))
         self.checkBox_boot.setText(QCoreApplication.translate("MainWindow", u"\u5f00\u673a\u81ea\u542f\u52a8", None))
-        self.checkBox_disorder.setText(QCoreApplication.translate("MainWindow", u"\u4e71\u5e8f\u8f6e\u6362", None))
+        self.checkBox_disorder.setText(QCoreApplication.translate("MainWindow", u"\u4e71\u5e8f", None))
         self.pushButton_previous.setText(QCoreApplication.translate("MainWindow", u"\u4e0a\u4e00\u5f20", None))
         self.pushButton_next.setText(QCoreApplication.translate("MainWindow", u"\u4e0b\u4e00\u5f20", None))
         self.pushButton_auto.setText(QCoreApplication.translate("MainWindow", u"\u81ea\u52a8\u8f6e\u6362", None))

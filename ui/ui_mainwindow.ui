@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>图片自动轮换工具 by AfricanGigolo</string>
+   <string>自动切换壁纸工具 by AfricanGigolo</string>
   </property>
   <property name="animated">
    <bool>true</bool>

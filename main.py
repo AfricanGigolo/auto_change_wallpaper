@@ -1,5 +1,8 @@
 import os.path
 
+import pystray
+import PySide6
+
 from ui.ui_mainwindow import Ui_MainWindow
 
 from PySide6.QtWidgets import QMainWindow
@@ -12,12 +15,12 @@ from config import *
 from PIL import Image
 from pystray import MenuItem
 
-
 CONFIG_DIR = "workDir"
 CONFIG_DURATION = "duration"
 CONFIG_CLOSE = "close"
 CONFIG_BOOT = "boot"
 CONFIG_DISORDER = "disorder"
+app: QtWidgets.QApplication
 
 
 class MainWindow(QMainWindow):
@@ -29,7 +32,9 @@ class MainWindow(QMainWindow):
         self.changer: WallpaperChanger = None
         self.flag_running = False
         self.__init_config()
+        self.__init_icon()
         self.__init_ui()
+        self.__update_changer()
 
     def __init_config(self):
         self.config = get_config()
@@ -40,6 +45,24 @@ class MainWindow(QMainWindow):
             self.config[CONFIG_BOOT] = False
             self.config[CONFIG_DISORDER] = False
             set_config(self.config)
+
+    def __menu_open_main_window(self):
+        self.show()
+
+    def __menu_exit(self):
+        self.__stop()
+        app.exit(0)
+
+    def __get_menu(self):
+        ret = [MenuItem(text='打开主界面', action=self.__menu_open_main_window),
+               MenuItem(text='退出', action=self.__menu_exit)]
+        return ret
+
+
+    def __init_icon(self):
+        self.icon = pystray.Icon("auto_change_wallpaper", Image.open(get_resource_path("./assets/auto.ico")),
+                                 "自动切换壁纸工具", self.__get_menu())
+        self.icon.run_detached()
 
     def __init_ui(self):
         self.ui.lineEdit_dir.setText(self.config[CONFIG_DIR])
@@ -91,7 +114,7 @@ class MainWindow(QMainWindow):
         self.changer = WallpaperChanger(self.ui.lineEdit_dir.text())
 
     def __no_pic_err(self):
-        QtWidgets.QMessageBox(self, "错误", "请检查目录下是否存在图片！")
+        QtWidgets.QMessageBox(None, "错误", "请检查目录下是否存在图片！")
 
     @Slot()
     def __previous(self):
@@ -126,9 +149,10 @@ class MainWindow(QMainWindow):
         self.ui.checkBox_disorder.setEnabled(False)
         self.ui.checkBox_boot.setEnabled(False)
         self.ui.checkBox_close.setEnabled(False)
-        self.ui.label_status.setText("running")
         self.ui.label_status.setStyleSheet("color:green")
         self.ui.pushButton_auto.setText("停止轮换")
+        self.ui.label_status.setText("当前是自动轮换模式")
+        self.icon.update_menu()
 
     def __switch_to_stop_ui(self):
         self.ui.lineEdit_dir.setEnabled(True)
@@ -137,17 +161,31 @@ class MainWindow(QMainWindow):
         self.ui.checkBox_disorder.setEnabled(True)
         self.ui.checkBox_boot.setEnabled(True)
         self.ui.checkBox_close.setEnabled(True)
-        self.ui.label_status.setText("stopped")
         self.ui.label_status.setStyleSheet("color:red")
         self.ui.pushButton_auto.setText("自动轮换")
+        self.ui.label_status.setText("当前是手动切换模式")
+        self.icon.update_menu()
 
     def __output_msg(self, msg, color="black"):
         self.ui.label_msg.setText(msg)
         self.ui.label_msg.setStyleSheet("color:%s" % color)
 
+    def __stop(self):
+        self.icon.stop()
+
+    def closeEvent(self, event: PySide6.QtGui.QCloseEvent) -> None:
+        if self.ui.checkBox_close.isChecked():
+            self.hide()
+            self.icon.notify("已隐藏到托盘")
+            event.ignore()
+        else:
+            self.__menu_exit()
+            event.accept()
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication(sys.argv)
+    app.setApplicationName("自动切换壁纸工具")
     gui = MainWindow()
     gui.show()
     sys.exit(app.exec())

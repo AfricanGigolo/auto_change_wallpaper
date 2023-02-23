@@ -3,7 +3,7 @@ import os.path
 
 from common import *
 
-__CONFIG_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+__CONFIG_FILE_DIR = os.path.dirname(os.path.realpath(sys.argv[0]))
 __CONFIG_FILE_NAME = "auto_change_wallpaper.data"
 
 
