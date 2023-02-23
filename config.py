@@ -3,21 +3,24 @@ import os.path
 
 from common import *
 
-__CONFIG_FILE_DIR = "./assets"
-__CONFIG_FILE_NAME = "config.json"
+__CONFIG_FILE_DIR = os.path.dirname(os.path.abspath(__file__))
+__CONFIG_FILE_NAME = "auto_change_wallpaper.data"
 
 
 def __read_config():
-    file_path = get_resource_path(os.path.join(__CONFIG_FILE_DIR, __CONFIG_FILE_NAME))
+    file_path = os.path.join(__CONFIG_FILE_DIR, __CONFIG_FILE_NAME)
     if not os.path.exists(file_path):
         return {}
     with open(file_path, 'r') as f:
-        content = json.load(f)
+        try:
+            content = json.load(f)
+        except:
+            content = {}
         return content
 
 
 def set_config(config_dict):
-    file_path = get_resource_path(os.path.join(__CONFIG_FILE_DIR, __CONFIG_FILE_NAME))
+    file_path = os.path.join(__CONFIG_FILE_DIR, __CONFIG_FILE_NAME)
     old_config = __read_config()
     new_config = dict(old_config, **config_dict)
     with open(file_path, "w") as f:

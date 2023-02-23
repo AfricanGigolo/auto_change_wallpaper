@@ -7,4 +7,6 @@ def get_resource_path(relative_path):
         base_path = sys._MEIPASS
     else:
         base_path = os.path.dirname(os.path.abspath(__file__))
-    return os.path.join(base_path, relative_path)
+    ret = os.path.join(base_path, relative_path)
+    print("get resource path:", ret)
+    return ret
