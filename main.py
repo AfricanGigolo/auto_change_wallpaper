@@ -71,6 +71,7 @@ class MainWindow(QMainWindow):
         self.ui.checkBox_boot.setChecked(self.config[CONFIG_BOOT])
         self.ui.checkBox_disorder.setChecked(self.config[CONFIG_DISORDER])
         self.ui.label_msg.setText("")
+        self.ui.label_status.setStyleSheet("color:red")
         self.ui.label_status.setText("当前是手动切换模式")
 
     def __save_config(self):
