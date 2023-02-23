@@ -73,6 +73,9 @@ class MainWindow(QMainWindow):
         self.ui.label_msg.setText("")
         self.ui.label_status.setStyleSheet("color:red")
         self.ui.label_status.setText("当前是手动切换模式")
+        # 暂未实现：
+        self.ui.checkBox_boot.setVisible(False)
+
 
     def __save_config(self):
         self.config[CONFIG_DIR] = self.ui.lineEdit_dir.text()
@@ -99,7 +102,17 @@ class MainWindow(QMainWindow):
         self.ui.pushButton_next.clicked.connect(self.__next)
         self.ui.pushButton_previous.clicked.connect(self.__previous)
         self.ui.pushButton_auto.clicked.connect(self.__auto_run)
+        self.ui.checkBox_close.stateChanged.connect(self.__close_type_changed)
         self.ui.checkBox_disorder.stateChanged.connect(self.__auto_boot_changed)
+
+    @Slot(Qt.CheckState)
+    def __close_type_changed(self, checked):
+        print("close type changed:", checked)
+        if checked == Qt.CheckState.Checked:
+            self.config[CONFIG_CLOSE] = True
+        else:
+            self.config[CONFIG_CLOSE] = False
+        self.__save_config()
 
     @Slot(Qt.CheckState)
     def __auto_boot_changed(self, checked):
@@ -108,6 +121,8 @@ class MainWindow(QMainWindow):
             self.config[CONFIG_BOOT] = True
         else:
             self.config[CONFIG_BOOT] = False
+        self.__save_config()
+
 
     def __update_changer(self):
         if self.changer is not None:
